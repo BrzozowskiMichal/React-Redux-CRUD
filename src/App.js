@@ -1,28 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import PostForm from './PostForm';
+import AllPost from './AllPost';
+import axios from "axios";
 
 class App extends Component {
+  componentDidMount() {
+    fetchThoughts();
+  }
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="navbar">
+        <h2 className="center">Pin up your thoughts!</h2>
+      </div>
+        <PostForm />
+        <AllPost />
       </div>
     );
   }
+}
+
+export function fetchThoughts() {
+  return function(dispatch) {
+      return axios.get('https://thoughts-229a.restdb.io/rest/thoughts')
+      .then(({data}) => {
+          dispatch(setThoughts(data));
+      });
+  };
+}
+
+function setThoughts(data) {
+  return {
+    type: 'GET_THOUGHTS',
+    payload: data
+  };
 }
 
 export default App;
